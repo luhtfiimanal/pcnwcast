@@ -182,7 +182,7 @@
                     // console.log(data)
 
                     hima = L.tileLayer(
-                        `https://isdp.circlegeo.com/api/v1/api/satellite/tile/himawari/{z}/{x}/{y}.png?type=EH&baserun=${data.himawari9[0]}`, {
+                        `https://satellite.bmkg.go.id/api22/tile/{z}/{x}/{y}.png?tiletype=himawari9&modelname=himawari9&param=EH&baserun=${data.himawari9[0]}`, {
                         tms: true,
                         opacity: 0.8
                     })
@@ -494,7 +494,9 @@
                         .setContent(`
                             <div>Data Point</div>
                             <div style="font-weight:bold">${result.time[0].split('T').join(' ').replace(':00Z', ' UTC')}</div>
-                            <div style="margin-top:10px;">${parseFloat(result.precip[0][0]).toFixed(2)} mm/hour</div>
+                            <div style="margin-top:10px;">Longitude: ${e.latlng.lng.toFixed(2)}</div>
+                            <div>Latitude: ${e.latlng.lat.toFixed(2)}</div>
+                            <div>Value: ${parseFloat(result.precip[0][0]).toFixed(2)} mm/hour</div>
                         `)
                         .openOn(map);
                 })
