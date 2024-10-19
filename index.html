@@ -197,59 +197,42 @@
         }
 
         function fetchData() {
-            fetch('https://satellite.bmkg.go.id/api22/modelrun') // Replace with your API URL
+            fetch('https://satellite.bmkg.go.id/api22/modelrun') // Keep using the old API for himawari9
                 .then(response => response.json())
                 .then(data => {
-                    // console.log(data)
-
                     hima = L.tileLayer(
                         `https://satellite.bmkg.go.id/api22/tile/{z}/{x}/{y}.png?tiletype=himawari9&modelname=himawari9&param=EH&baserun=${data.himawari9[0]}`, {
                         tms: true,
                         opacity: 0.8
-                    })
-                    document.getElementById('himadate').innerHTML = data.himawari9[0]
-                    dhima = false
+                    });
+                    document.getElementById('himadate').innerHTML = data.himawari9[0];
+                    dhima = false;
                 })
                 .catch(error => {
-                    console.error('Error fetching data:', error);
-                    // document.getElementById('data-container').innerHTML = 'Error loading data.';
+                    console.error('Error fetching Himawari9 data:', error);
                 });
-
-            fetch('https://siam-staging.my.id/api23/modelrun') // Replace with your API URL
+        
+            fetch('https://siam-staging.my.id/api23/modelrun') // Fetch pcnwcast and radar from the same API
                 .then(response => response.json())
                 .then(data => {
-                    // console.log(data)
+                    // Handle pcnwcast
                     pcnw = L.tileLayer(
                         `https://siam-staging.my.id/api23/mpl_req/pcnwcast/precip/0/${formatDate(data.pcnwcast[0])}/${formatDate(data.pcnwcast[0])}/{z}/{x}/{y}.png?overlays=contourf`, {
                         tms: true,
                         opacity: 0.8
-                    })
-
-                    document.getElementById('precipdate').innerHTML = data.pcnwcast[0]
-                    dpcnw = false
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    // document.getElementById('data-container').innerHTML = 'Error loading data.';
-                });
-
-            fetch('https://rami.bmkg.go.id/api/radar_date') // Replace with your API URL
-                .then(response => response.json())
-                .then(data => {
-                    var url = 'https://rami.bmkg.go.id/api/radar_get/dBZ/'
-                    // console.log(data)
+                    });
+                    document.getElementById('precipdate').innerHTML = data.pcnwcast[0];
+                    dpcnw = false;
                     radar = L.tileLayer(
-                        url + convertDateToCustomFormat(data.collection) + '/{z}/{x}/{y}.png', {
+                        `https://siam-staging.my.id/api23/mpl_req/radar/radar/0/${formatDate(data.pcnwcast[0])}/${formatDate(data.pcnwcast[0])}/{z}/{x}/{y}.png?overlays=contourf`, {
                         tms: true,
                         opacity: 0.8
-                    })
-
-                    document.getElementById('radardate').innerHTML = data.collection
-                    dradar = false
+                    });
+                    document.getElementById('radardate').innerHTML = data.radar[0];
+                    dradar = false;
                 })
                 .catch(error => {
-                    console.error('Error fetching data:', error);
-                    // document.getElementById('data-container').innerHTML = 'Error loading data.';
+                    console.error('Error fetching modelrun data:', error);
                 });
         }
         // Call the function when the script loads
